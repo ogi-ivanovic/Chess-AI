@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/ogiiv/CLionProjects/chess/board.h
+vector
+-
+piece.h
+C:/Users/ogiiv/CLionProjects/chess/piece.h
+
+C:/Users/ogiiv/CLionProjects/chess/computer_player.cpp
+computer_player.h
+C:/Users/ogiiv/CLionProjects/chess/computer_player.h
+
+C:/Users/ogiiv/CLionProjects/chess/computer_player.h
+player.h
+C:/Users/ogiiv/CLionProjects/chess/player.h
+
+C:/Users/ogiiv/CLionProjects/chess/exceptions.h
+string
+-
+
+C:/Users/ogiiv/CLionProjects/chess/piece.h
+map
+-
+iterator
+-
+string
+-
+vector
+-
+iostream
+-
+
+C:/Users/ogiiv/CLionProjects/chess/player.h
+algorithm
+-
+board.h
+C:/Users/ogiiv/CLionProjects/chess/board.h
+exceptions.h
+C:/Users/ogiiv/CLionProjects/chess/exceptions.h
+
