@@ -7,6 +7,5 @@ int main() {
     ChessModel model{};
     Terminal view{&model};
     ChessController controller;
-
     controller.playGame(model, view);
 }

@@ -15,9 +15,10 @@ public:
 
     // need to check for invalid input later
     virtual std::string getName() = 0;
-    virtual std::pair<unsigned int, unsigned int> getCurrentPosition() = 0;
-    virtual std::pair<unsigned int, unsigned int> getNextPosition(
-            std::pair<unsigned int, unsigned int> curr) = 0;
+    virtual Position getCurrentPosition() = 0;
+    virtual Position getNextPosition(Position curr) = 0;
+
+    virtual void displayChooseOwnPiece() = 0;
 };
 
 

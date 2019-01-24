@@ -1,8 +1,7 @@
 #include "chess_model.h"
 
 
-void ChessModel::attack(std::pair<unsigned int, unsigned int> hunterPos,
-            std::pair<unsigned int, unsigned int> preyPos) {
+void ChessModel::attack(Position hunterPos,Position preyPos) {
     unsigned int preyPlayerNum;
     Piece * hunter = board->getFromSquare(hunterPos);
     Piece * prey = board->getFromSquare(preyPos);
@@ -23,7 +22,7 @@ ChessModel::ChessModel() :
     players.emplace_back(new ComputerPlayer{});
     for (unsigned int row = 0; row < boardSize; ++row) {
         for (unsigned int col = 0; col < boardSize; ++col) {
-            std::pair<unsigned int, unsigned int> pos(row, col);
+            Position pos(row, col);
             Piece * piece = board->getFromSquare(pos);
             if (piece) {
                 if (piece->getOwner() == Owner::Human) {
@@ -50,8 +49,7 @@ void ChessModel::setPlayerNames(const std::string & humanName) {
 
 
 // we already checked in the view if the chosen positions are valid
-void ChessModel::humanMove(std::pair<unsigned int, unsigned int> curr,
-          std::pair<unsigned int, unsigned int> next) {
+void ChessModel::humanMove(Position curr, Position next) {
 
     // attack
     if (board->getFromSquare(next)) {
@@ -66,8 +64,7 @@ void ChessModel::humanMove(std::pair<unsigned int, unsigned int> curr,
 }
 
 
-bool ChessModel::isPlayersPiece(std::pair<unsigned int, unsigned int> curr,
-        Owner owner) {
+bool ChessModel::isPlayersPiece(Position curr, Owner owner) {
     Player * player;
     if (owner == Owner::Human) {
         player = players.at(0);

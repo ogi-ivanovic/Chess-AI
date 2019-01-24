@@ -5,10 +5,13 @@
 #include <iterator>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include <iostream>
 
 enum Owner {Human, Computer};
+
+typedef std::pair<unsigned int, unsigned> Position;
 
 
 class Piece {
@@ -16,26 +19,28 @@ protected:
     unsigned int row;
     unsigned int col;
     Owner owner;
-    std::vector<std::pair<unsigned int, unsigned int>> possibleMoves;
+    std::vector<Position> possibleMoves;
 public:
     Piece(unsigned int row, unsigned int col, Owner player); // make protected
     unsigned int getRow();
     unsigned int getCol();
 
-    std::vector<std::pair<unsigned int, unsigned int>> getPossibilities() {
+    std::vector<Position> getPossibilities() {
         return possibleMoves;
     }
 
     Owner getOwner();
-    bool isPossibleMove(std::pair<unsigned int, unsigned int> move);
-    void movePiece(std::pair<unsigned int, unsigned int> next);
+    bool isPossibleMove(Position move);
+    void movePiece(Position next);
 
     void displayPossibilities() {
-        for (int i =0; i < possibleMoves.size(); ++i) {
+        for (unsigned int i =0; i < possibleMoves.size(); ++i) {
             std::cout << possibleMoves.at(i).first << ", " << possibleMoves.at(i).second << std::endl;
         }
     }
 
+    virtual bool isBlockingPath(Position blocker, Position next) = 0;
+    virtual void filterPossibilities(std::vector<Position>) = 0;
     virtual void updatePossibilities() = 0;
     virtual std::string getDisplay() = 0;
     virtual ~Piece() = default;
@@ -45,7 +50,9 @@ public:
 class King : public Piece {
 public:
     King(unsigned int x, unsigned int y, Owner player);
+    bool isBlockingPath(Position blocker, Position next);
     void updatePossibilities() override;
+    void filterPossibilities(std::vector<Position>) override;
     std::string getDisplay() override;
 };
 
@@ -53,7 +60,9 @@ public:
 class Queen : public Piece {
 public:
     Queen(unsigned int x, unsigned int y, Owner player);
+    bool isBlockingPath(Position blocker, Position next);
     void updatePossibilities() override;
+    void filterPossibilities(std::vector<Position>) override;
     std::string getDisplay() override;
 };
 
@@ -61,7 +70,9 @@ public:
 class Bishop : public Piece {
 public:
     Bishop(unsigned int x, unsigned int y, Owner player);
+    bool isBlockingPath(Position blocker, Position next);
     void updatePossibilities() override;
+    void filterPossibilities(std::vector<Position>) override;
     std::string getDisplay() override;
 };
 
@@ -69,7 +80,9 @@ public:
 class Knight : public Piece {
 public:
     Knight(unsigned int x, unsigned int y, Owner player);
+    bool isBlockingPath(Position blocker, Position next);
     void updatePossibilities() override;
+    void filterPossibilities(std::vector<Position>) override;
     std::string getDisplay() override;
 };
 
@@ -77,7 +90,9 @@ public:
 class Rook : public Piece {
 public:
     Rook(unsigned int x, unsigned int y, Owner player);
+    bool isBlockingPath(Position blocker, Position next);
     void updatePossibilities() override;
+    void filterPossibilities(std::vector<Position>) override;
     std::string getDisplay() override;
 };
 
@@ -85,7 +100,9 @@ public:
 class Pawn : public Piece {
 public:
     Pawn(unsigned int x, unsigned int y, Owner player);
+    bool isBlockingPath(Position blocker, Position next);
     void updatePossibilities() override;
+    void filterPossibilities(std::vector<Position>) override;
     std::string getDisplay() override;
 };
 

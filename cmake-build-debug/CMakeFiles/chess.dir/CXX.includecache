@@ -12,7 +12,15 @@ vector
 piece.h
 C:/Users/ogiiv/CLionProjects/chess/piece.h
 
-C:/Users/ogiiv/CLionProjects/chess/computer_player.cpp
+C:/Users/ogiiv/CLionProjects/chess/chess_controller.h
+chess_model.h
+C:/Users/ogiiv/CLionProjects/chess/chess_model.h
+view.h
+C:/Users/ogiiv/CLionProjects/chess/view.h
+
+C:/Users/ogiiv/CLionProjects/chess/chess_model.h
+human_player.h
+C:/Users/ogiiv/CLionProjects/chess/human_player.h
 computer_player.h
 C:/Users/ogiiv/CLionProjects/chess/computer_player.h
 
@@ -24,6 +32,18 @@ C:/Users/ogiiv/CLionProjects/chess/exceptions.h
 string
 -
 
+C:/Users/ogiiv/CLionProjects/chess/human_player.h
+player.h
+C:/Users/ogiiv/CLionProjects/chess/player.h
+
+C:/Users/ogiiv/CLionProjects/chess/main.cpp
+iostream
+-
+chess_controller.h
+C:/Users/ogiiv/CLionProjects/chess/chess_controller.h
+terminal.h
+C:/Users/ogiiv/CLionProjects/chess/terminal.h
+
 C:/Users/ogiiv/CLionProjects/chess/piece.h
 map
 -
@@ -32,6 +52,8 @@ iterator
 string
 -
 vector
+-
+algorithm
 -
 iostream
 -
@@ -43,4 +65,14 @@ board.h
 C:/Users/ogiiv/CLionProjects/chess/board.h
 exceptions.h
 C:/Users/ogiiv/CLionProjects/chess/exceptions.h
+
+C:/Users/ogiiv/CLionProjects/chess/terminal.h
+view.h
+C:/Users/ogiiv/CLionProjects/chess/view.h
+
+C:/Users/ogiiv/CLionProjects/chess/view.h
+iostream
+-
+chess_model.h
+C:/Users/ogiiv/CLionProjects/chess/chess_model.h
 

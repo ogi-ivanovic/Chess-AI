@@ -8,11 +8,11 @@ public:
     explicit Terminal(ChessModel * model);
 
     void displayBoard() const override;
+    void displayChooseOwnPiece() override;
 
     std::string getName() override;
-    std::pair<unsigned int, unsigned int> getCurrentPosition() override;
-    std::pair<unsigned int, unsigned int> getNextPosition(
-            std::pair<unsigned int, unsigned int> curr) override;
+    Position getCurrentPosition() override;
+    Position getNextPosition(Position curr) override;
 };
 
 

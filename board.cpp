@@ -70,25 +70,45 @@ std::string Board::getDisplay() {
 }
 
 
-bool Board::positionOnBoard(std::pair<unsigned int, unsigned int> pos) {
+bool Board::positionOnBoard(Position pos) {
     if (!((pos.first >= 0) && (pos.first <= 7))) return false;
     if (!((pos.second >= 0) && (pos.second <= 7))) return false;
     return true;
 }
 
 
-Piece * Board::getFromSquare(std::pair<unsigned int, unsigned int> pos) {
+Piece * Board::getFromSquare(Position pos) {
     return board.at(pos.first).at(pos.second);
 }
 
 
-void Board::fillSquare(Piece * piece, std::pair<unsigned int, unsigned int> pos) {
+void Board::fillSquare(Piece * piece, Position pos) {
     board.at(pos.first).at(pos.second) = piece;
     piece->movePiece(pos);
     piece->updatePossibilities();
 }
 
 
-void Board::clearSquare(std::pair<unsigned int, unsigned int> pos) {
+void Board::clearSquare(Position pos) {
     board.at(pos.first).at(pos.second) = nullptr;
+}
+
+
+void Board::filterPiecesPossibleMoves() {
+    std::vector<Position> positions;
+    for (auto & row : board) {
+        for (auto piece : row) {
+            if (piece) {
+                positions.emplace_back(std::make_pair(piece->getRow(), piece->getCol()));
+            }
+        }
+    }
+
+    for (auto & row : board) {
+        for (auto piece : row) {
+            if (piece) {
+                piece->filterPossibilities(positions);
+            }
+        }
+    }
 }

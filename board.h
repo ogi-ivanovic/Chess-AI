@@ -13,10 +13,12 @@ public:
     Board();
     ~Board(); // delete pieces from board
     std::string getDisplay(); // returns a string of the board
-    bool positionOnBoard(std::pair<unsigned int, unsigned int> pos);
-    Piece * getFromSquare(std::pair<unsigned int, unsigned int> pos);
-    void fillSquare(Piece * piece, std::pair<unsigned int, unsigned int> pos);
-    void clearSquare(std::pair<unsigned int, unsigned int> pos);
+    bool positionOnBoard(Position pos);
+    Piece * getFromSquare(Position pos);
+    std::vector<Position> getPiecePositions();
+    void fillSquare(Piece * piece, Position pos);
+    void clearSquare(Position pos);
+    void filterPiecesPossibleMoves();
 };
 
 

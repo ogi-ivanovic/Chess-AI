@@ -21,8 +21,7 @@ public:
     }
     virtual ~Player();
     virtual void move(Board * board) = 0;
-    virtual void move(std::pair<unsigned int, unsigned int> curr,
-              std::pair<unsigned int, unsigned int> next, Board * board) = 0;
+    virtual void move(Position curr, Position next, Board * board) = 0;
 };
 
 

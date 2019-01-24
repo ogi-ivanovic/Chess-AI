@@ -6,11 +6,6 @@ Terminal::Terminal(ChessModel * model) :
 }
 
 
-void Terminal::displayBoard() const {
-    std::cout << model->getBoard()->getDisplay();
-}
-
-
 std::string Terminal::getName() {
     std::string name;
     std::cin >> name;
@@ -18,7 +13,7 @@ std::string Terminal::getName() {
 }
 
 
-std::pair<unsigned int, unsigned int> Terminal::getCurrentPosition() {
+Position Terminal::getCurrentPosition() {
     std::cout << "Current piece position: ";
     unsigned int currRow, currCol;
     if (!(std::cin >> currRow)) {
@@ -27,7 +22,7 @@ std::pair<unsigned int, unsigned int> Terminal::getCurrentPosition() {
     if (!(std::cin >> currCol)) {
         throw InvalidChoice{};
     }
-    std::pair<unsigned int, unsigned int> curr(currRow, currCol);
+    Position curr(currRow, currCol);
     if (!(model->getBoard()->positionOnBoard(curr))) {
         throw InvalidChoice{};
     } else if (!(model->isPlayersPiece(curr, Owner::Human))) {
@@ -37,8 +32,7 @@ std::pair<unsigned int, unsigned int> Terminal::getCurrentPosition() {
 }
 
 
-std::pair<unsigned int, unsigned int> Terminal::getNextPosition(
-        std::pair<unsigned int, unsigned int> curr) {
+Position Terminal::getNextPosition(Position curr) {
     std::cout << "Desired piece position: ";
     unsigned int nextRow, nextCol;
     if (!(std::cin >> nextRow)) {
@@ -47,7 +41,7 @@ std::pair<unsigned int, unsigned int> Terminal::getNextPosition(
     if (!(std::cin >> nextCol)) {
         throw InvalidMove{"Incorrect input."};
     }
-    std::pair<unsigned int, unsigned int> next(nextRow, nextCol);
+    Position next(nextRow, nextCol);
     if (!(model->getBoard()->positionOnBoard(next))) {
         throw InvalidMove{"Square is not on board."};
     } else if (model->getBoard()->getFromSquare(next) != nullptr) {
@@ -59,4 +53,15 @@ std::pair<unsigned int, unsigned int> Terminal::getNextPosition(
         throw InvalidMove{p + " can't be moved there."};
     }
     return next;
+}
+
+////////////////// DISPLAY METHODS //////////////////
+
+void Terminal::displayBoard() const {
+    std::cout << model->getBoard()->getDisplay();
+}
+
+
+void Terminal::displayChooseOwnPiece() {
+    std::cout << "You must choose one of your pieces." << std::endl;
 }

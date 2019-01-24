@@ -6,8 +6,7 @@
 class HumanPlayer : public Player {
 public:
     void move(Board * board) override;
-    void move(std::pair<unsigned int, unsigned int> curr,
-              std::pair<unsigned int, unsigned int> next, Board * board) override;
+    void move(Position curr, Position next, Board * board) override;
 };
 
 

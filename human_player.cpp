@@ -7,8 +7,7 @@ void HumanPlayer::move(Board * board) {
 
 
 
-void HumanPlayer::move(std::pair<unsigned int, unsigned int> curr,
-          std::pair<unsigned int, unsigned int> next, Board * board) {
+void HumanPlayer::move(Position curr, Position next, Board * board) {
    /* if (!board->positionOnBoard(next)) {
         throw InvalidMove{"Square is not on board."};
     } else if (!board->getFromSquare(next)) {

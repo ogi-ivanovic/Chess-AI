@@ -23,7 +23,7 @@ Owner Piece::getOwner() {
 }
 
 
-bool Piece::isPossibleMove(std::pair<unsigned int, unsigned int> move) {
+bool Piece::isPossibleMove(Position move) {
     for (auto itr : possibleMoves) {
         if (move == itr) {
             return true;
@@ -33,7 +33,7 @@ bool Piece::isPossibleMove(std::pair<unsigned int, unsigned int> move) {
 }
 
 
-void Piece::movePiece(std::pair<unsigned int, unsigned int> next) {
+void Piece::movePiece(Position next) {
     row = next.first;
     col = next.second;
 }
@@ -46,43 +46,52 @@ King::King(unsigned int row, unsigned int col, Owner player) :
 }
 
 
+bool King::isBlockingPath(Position blocker, Position next) {
+    return false;
+}
+
+
 void King::updatePossibilities() {
     // add caste move possibility later
     possibleMoves.clear();
     if (row >= 1) { // up
-        std::pair<unsigned int, unsigned int> pos(row - 1, col);
+        Position pos(row - 1, col);
         possibleMoves.emplace_back(pos);
     }
     if (row < boardSize - 1) { // down
-        std::pair<unsigned int, unsigned int> pos(row + 1, col);
+        Position pos(row + 1, col);
         possibleMoves.emplace_back(pos);
     }
     if (col >= 1) { // left
-        std::pair<unsigned int, unsigned int> pos(row, col - 1);
+        Position pos(row, col - 1);
         possibleMoves.emplace_back(pos);
     }
     if (col < boardSize - 1) { // right
-        std::pair<unsigned int, unsigned int> pos(row, col + 1);
+        Position pos(row, col + 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row >= 1) && (col >= 1)) { // up & left
-        std::pair<unsigned int, unsigned int> pos(row - 1, col - 1);
+        Position pos(row - 1, col - 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row >= 1) && (col < boardSize - 1)) { // up & right
-        std::pair<unsigned int, unsigned int> pos(row - 1, col + 1);
+        Position pos(row - 1, col + 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row < boardSize - 1) && (col >= 1)) { // down & left
-        std::pair<unsigned int, unsigned int> pos(row + 1, col - 1);
+        Position pos(row + 1, col - 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row < boardSize - 1) && (col < boardSize - 1)) { // down & right
-        std::pair<unsigned int, unsigned int> pos(row + 1, col + 1);
+        Position pos(row + 1, col + 1);
         possibleMoves.emplace_back(pos);
     }
 }
 
+
+void King::filterPossibilities(std::vector<Position> positions) {
+
+}
 
 std::string King::getDisplay() {
     if (owner == Owner::Human) {
@@ -100,29 +109,34 @@ Queen::Queen(unsigned int row, unsigned int col, Owner player) :
 }
 
 
+bool Queen::isBlockingPath(Position blocker, Position next) {
+    return true;
+}
+
+
 void Queen::updatePossibilities() {
     possibleMoves.clear();
     int tempRow = row - 1;
     while (tempRow >= 0) { // up
-        std::pair<unsigned int, unsigned int> pos (tempRow, col);
+        Position pos (tempRow, col);
         possibleMoves.emplace_back(pos);
         --tempRow;
     }
     tempRow = row + 1;
     while (tempRow < boardSize) { // down
-        std::pair<unsigned int, unsigned int> pos (tempRow, col);
+        Position pos (tempRow, col);
         possibleMoves.emplace_back(pos);
         ++tempRow;
     }
     int tempCol = col - 1;
     while (tempCol >= 0) { // left
-        std::pair<unsigned int, unsigned int> pos (row, tempCol);
+        Position pos (row, tempCol);
         possibleMoves.emplace_back(pos);
         --tempCol;
     }
     tempCol = col + 1;
     while (tempCol < boardSize) { // right
-        std::pair<unsigned int, unsigned int> pos (row, tempCol);
+        Position pos (row, tempCol);
         possibleMoves.emplace_back(pos);
         ++tempCol;
     }
@@ -130,7 +144,7 @@ void Queen::updatePossibilities() {
     tempRow = row - 1;
     tempCol = col - 1;
     while ((tempRow >= 0) && (tempCol >= 0)) { // up & left
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         --tempRow;
         --tempCol;
@@ -138,7 +152,7 @@ void Queen::updatePossibilities() {
     tempRow = row - 1;
     tempCol = col + 1;
     while ((tempRow >= 0) && (tempCol < boardSize)) { // up & right
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         --tempRow;
         ++tempCol;
@@ -146,7 +160,7 @@ void Queen::updatePossibilities() {
     tempRow = row + 1;
     tempCol = col - 1;
     while ((tempRow < boardSize) && (tempCol >= 0)) { // down & left
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         ++tempRow;
         --tempCol;
@@ -154,12 +168,26 @@ void Queen::updatePossibilities() {
     tempRow = row + 1;
     tempCol = col + 1;
     while ((tempRow <boardSize) && (tempCol < boardSize)) { // down & right
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         ++tempRow;
         ++tempCol;
     }
 
+}
+
+
+// TEST TEST TEST TESTTTT IMPLEMENT FOR OTHER CLASSES AS WELL
+void Queen::filterPossibilities(std::vector<Position> positions) {
+    for (auto next : possibleMoves) {
+        for (auto blocker : positions) {
+            if (isBlockingPath(blocker, next)) {
+                possibleMoves.erase(std::remove(possibleMoves.begin(),
+                        possibleMoves.end(), next), possibleMoves.end());
+                break;
+            }
+        }
+    }
 }
 
 
@@ -179,12 +207,17 @@ Bishop::Bishop(unsigned int row, unsigned int col, Owner player) :
 }
 
 
+bool Bishop::isBlockingPath(Position blocker, Position next) {
+    return true;
+}
+
+
 void Bishop::updatePossibilities() {
     possibleMoves.clear();
     int tempRow = row - 1;
     int tempCol = col - 1;
     while ((tempRow >= 0) && (tempCol >= 0)) { // up & left
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         --tempRow;
         --tempCol;
@@ -192,7 +225,7 @@ void Bishop::updatePossibilities() {
     tempRow = row - 1;
     tempCol = col + 1;
     while ((tempRow >= 0) && (tempCol < boardSize)) { // up & right
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         --tempRow;
         ++tempCol;
@@ -200,7 +233,7 @@ void Bishop::updatePossibilities() {
     tempRow = row + 1;
     tempCol = col - 1;
     while ((tempRow < boardSize) && (tempCol >= 0)) { // down & left
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         ++tempRow;
         --tempCol;
@@ -208,11 +241,16 @@ void Bishop::updatePossibilities() {
     tempRow = row + 1;
     tempCol = col + 1;
     while ((tempRow <boardSize) && (tempCol < boardSize)) { // down & right
-        std::pair<unsigned int, unsigned int> pos(tempRow, tempCol);
+        Position pos(tempRow, tempCol);
         possibleMoves.emplace_back(pos);
         ++tempRow;
         ++tempCol;
     }
+}
+
+
+void Bishop::filterPossibilities(std::vector<Position> positions) {
+
 }
 
 
@@ -232,41 +270,51 @@ Knight::Knight(unsigned int row, unsigned int col, Owner player) :
 }
 
 
+bool Knight::isBlockingPath(Position blocker, Position next) {
+    return false;
+}
+
+
 void Knight::updatePossibilities() {
     possibleMoves.clear();
     if ((row >= 2) && (col >= 1)) { // up & left 1
-        std::pair<unsigned int, unsigned int> pos (row - 2, col - 1);
+        Position pos (row - 2, col - 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row >= 2) && (col < boardSize - 1)) { // up & right 1
-        std::pair<unsigned int, unsigned int> pos (row - 2, col + 1);
+        Position pos (row - 2, col + 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row < boardSize - 2) && (col >= 1)) { // down & left 1
-        std::pair<unsigned int, unsigned int> pos (row + 2, col - 1);
+        Position pos (row + 2, col - 1);
         possibleMoves.emplace_back(pos);
     }
     if ((row < boardSize - 2) && (col < boardSize - 1)) { // down & right 1
-        std::pair<unsigned int, unsigned int> pos (row + 2, col + 1);
+        Position pos (row + 2, col + 1);
         possibleMoves.emplace_back(pos);
     }
 
     if ((row >= 1) && (col >= 2)) { // up & left 2
-        std::pair<unsigned int, unsigned int> pos (row, col);
+        Position pos (row, col);
         possibleMoves.emplace_back(pos);
     }
     if ((row >= 1) && (col < boardSize - 2)) { // up & right 2
-        std::pair<unsigned int, unsigned int> pos (row - 1, col + 2);
+        Position pos (row - 1, col + 2);
         possibleMoves.emplace_back(pos);
     }
     if ((row < boardSize - 1) && (col >= 2)) { // down & left 2
-        std::pair<unsigned int, unsigned int> pos (row + 1, col - 2);
+        Position pos (row + 1, col - 2);
         possibleMoves.emplace_back(pos);
     }
     if ((row < boardSize - 1) && (col < boardSize - 2)) { // down & right 2
-        std::pair<unsigned int, unsigned int> pos (row + 1, col + 2);
+        Position pos (row + 1, col + 2);
         possibleMoves.emplace_back(pos);
     }
+}
+
+
+void Knight::filterPossibilities(std::vector<Position> positions) {
+
 }
 
 
@@ -286,32 +334,42 @@ Rook::Rook(unsigned int row, unsigned int col, Owner player) :
 }
 
 
+bool Rook::isBlockingPath(Position blocker, Position next) {
+    return true;
+}
+
+
 void Rook::updatePossibilities() {
     possibleMoves.clear();
     int tempRow = row - 1;
     while (tempRow >= 0) { // up
-        std::pair<unsigned int, unsigned int> pos (tempRow, col);
+        Position pos (tempRow, col);
         possibleMoves.emplace_back(pos);
         --tempRow;
     }
     tempRow = row + 1;
     while (tempRow < boardSize) { // down
-        std::pair<unsigned int, unsigned int> pos (tempRow, col);
+        Position pos (tempRow, col);
         possibleMoves.emplace_back(pos);
         ++tempRow;
     }
     int tempCol = col - 1;
     while (tempCol >= 0) { // left
-        std::pair<unsigned int, unsigned int> pos (row, tempCol);
+        Position pos (row, tempCol);
         possibleMoves.emplace_back(pos);
         --tempCol;
     }
     tempCol = col + 1;
     while (tempCol < boardSize) { // right
-        std::pair<unsigned int, unsigned int> pos (row, tempCol);
+        Position pos (row, tempCol);
         possibleMoves.emplace_back(pos);
         ++tempCol;
     }
+}
+
+
+void Rook::filterPossibilities(std::vector<Position> positions) {
+
 }
 
 
@@ -328,16 +386,21 @@ std::string Rook::getDisplay() {
 Pawn::Pawn(unsigned int row, unsigned int col, Owner player) :
     Piece{row, col, player} {
     if (row == 6) { // CHANGE TO player == Owner::Human ONCE AI IS WORKING
-        std::pair<unsigned int, unsigned int> upOne (row - 1, col);
-        std::pair<unsigned int, unsigned int> upTwo (row - 2, col);
+        Position upOne (row - 1, col);
+        Position upTwo (row - 2, col);
         possibleMoves.emplace_back(upOne);
         possibleMoves.emplace_back(upTwo);
     } else {
-        std::pair<unsigned int, unsigned int> downOne (row + 1, col);
-        std::pair<unsigned int, unsigned int> downTwo (row + 2, col);
+        Position downOne (row + 1, col);
+        Position downTwo (row + 2, col);
         possibleMoves.emplace_back(downOne);
         possibleMoves.emplace_back(downTwo);
     }
+}
+
+
+bool Pawn::isBlockingPath(Position blocker, Position next) {
+    return false;
 }
 
 
@@ -346,13 +409,18 @@ void Pawn::updatePossibilities() {
     // ADDDDDDDDD && OWNER::PLAYER STUFF TO CHECK CAUSE U CAN ONLY HAVE UP TO ONE
     // POSSIBLE MOVE FOR A PAWN OTHER THAN AT START
     if (row >= 1) { // up
-        std::pair<unsigned int, unsigned int> pos (row - 1, col);
+        Position pos (row - 1, col);
         possibleMoves.emplace_back(pos);
     }
     if (row < boardSize - 1) {
-        std::pair<unsigned int, unsigned int> pos (row + 1, col);
+        Position pos (row + 1, col);
         possibleMoves.emplace_back(pos);
     }
+}
+
+
+void Pawn::filterPossibilities(std::vector<Position> positions) {
+
 }
 
 

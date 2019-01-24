@@ -16,8 +16,8 @@ void ChessController::playGame(ChessModel & model, View & view) {
         int numberOfPlayers = model.getPlayer(0)->numAlivePieces() +
                               model.getPlayer(1)->numAlivePieces();
         std::cout << "Number of pieces: " << numberOfPlayers << std::endl;
-        std::pair<unsigned int, unsigned int> curr;
-        std::pair<unsigned int, unsigned int> next;
+        Position curr;
+        Position next;
         try {
             model.getPlayer(playerNum)->move(model.getBoard()); // works only for computer
             view.displayBoard();
@@ -27,7 +27,7 @@ void ChessController::playGame(ChessModel & model, View & view) {
                     curr = view.getCurrentPosition();
                     break;
                 } catch (InvalidChoice & choice) {
-                    std::cout << "You must choose one of your pieces." << std::endl;
+                    view.displayChooseOwnPiece();
                 }
             }
 

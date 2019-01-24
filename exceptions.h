@@ -11,7 +11,7 @@ class InvalidChoice {};
 class InvalidMove {
     std::string message;
 public:
-    explicit InvalidMove(const std::string & message) : message{message} {
+    explicit InvalidMove(std::string message) : message{std::move(message)} {
     }
 
     std::string what() {

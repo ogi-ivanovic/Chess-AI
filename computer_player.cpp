@@ -3,13 +3,13 @@
 
 void ComputerPlayer::move(Board * board) {
     Piece * piece;
-    std::pair<unsigned int, unsigned int> curr;
-    std::pair<unsigned int, unsigned int> next;
+    Position curr;
+    Position next;
     bool found = false;
 
     for (int i = 0; i < alivePieces.size(); ++i) {
         piece = alivePieces.at(i);
-        std::vector<std::pair<unsigned int, unsigned int>> possibilities;
+        std::vector<Position> possibilities;
         possibilities = piece->getPossibilities();
         for (int j = 0; j < possibilities.size(); ++j) {
             if (!(board->getFromSquare(possibilities.at(j)))) {
@@ -28,7 +28,6 @@ void ComputerPlayer::move(Board * board) {
 
 
 // do not need this method
-void ComputerPlayer::move(std::pair<unsigned int, unsigned int> curr,
-          std::pair<unsigned int, unsigned int> next, Board * board) {
+void ComputerPlayer::move(Position curr, Position next, Board * board) {
 
 }
